@@ -1,4 +1,5 @@
 import pygame
+import random
 
 blocks = [
     [[1, 4, 7], [3, 4, 5]],  # straight
@@ -15,11 +16,27 @@ class Block:
     def __init__(self, x, y):
         self.x = x
         self.y = y
-        self.type = 0
+        self.type = random.randint(0, 6)
         self.rotation = 1
 
     def shape(self):
         return blocks[self.type][self.rotation]
+
+
+def rotate():
+    last_rotation = block.rotation
+    block.rotation = (block.rotation + 1) % len(blocks[block.type])
+    can_rotate = True
+    for y in range(3):
+        for x in range(3):
+            if y * 3 + x in block.shape():
+                if block.y + y >= rows - 1 or \
+                        x + block.x >= cols - 1 or \
+                        x + block.x < 1 or \
+                        block.y + y < 0:
+                    can_rotate = False
+    if not can_rotate:
+        block.rotation = last_rotation
 
 
 def draw_block():
@@ -45,7 +62,7 @@ y_gap = (screen.get_height() - rows * grid_size) // 2
 pygame.display.set_caption("Tetris")
 
 game_over = False
-block = Block(0, 0)
+block = Block((cols - 1) // 2, 0)
 clock = pygame.time.Clock()
 fps = 10
 
@@ -98,6 +115,8 @@ def side_move(dx):
                     can_move = False
     if can_move:
         block.x += dx
+    else:
+        drop_block()
 
 
 while not game_over:
@@ -106,6 +125,9 @@ while not game_over:
         if event.type == pygame.QUIT:
             game_over = True
             continue
+        if event.type == pygame.KEYDOWN:
+            if event.key == pygame.K_UP:
+                rotate()
 
     if event.type == pygame.KEYDOWN:
         if event.key == pygame.K_LEFT:
@@ -118,8 +140,9 @@ while not game_over:
     if block is not None:
         draw_block()
         if event.type != pygame.KEYDOWN:
-            if not drop_block():
-                block = None
+            if not drop_block() \
+                    :
+                block = Block(random.randint(5, cols - 5), 0)
     pygame.display.update()
 
 pygame.quit()
