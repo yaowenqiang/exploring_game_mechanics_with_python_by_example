@@ -104,6 +104,20 @@ def drop_block():
     return can_drop
 
 
+def collides():
+    collision = False
+    for y in range(3):
+        for x in range(3):
+            if y * 3 + x in block.shape():
+                if y + block.y > rows - 1:
+                    collision = True
+                    break
+                if game_board[x + block.x][y + block.y]:
+                    collision = True
+                    break
+    return collision
+
+
 def side_move(dx):
     can_move = True
     for y in range(3):
