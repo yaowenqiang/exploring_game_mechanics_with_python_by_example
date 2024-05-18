@@ -90,7 +90,9 @@ def drop_block():
     for y in range(3):
         for x in range(3):
             if y * 3 + x in block.shape():
-                if block.y + y >= rows - 1:
+                # if block.y + y >= rows - 1:
+                #     can_drop = False
+                if collides(0, 1):
                     can_drop = False
 
     if can_drop:
@@ -104,15 +106,15 @@ def drop_block():
     return can_drop
 
 
-def collides():
+def collides(nx, ny):
     collision = False
     for y in range(3):
         for x in range(3):
             if y * 3 + x in block.shape():
-                if y + block.y > rows - 1:
+                if y + block.y + ny > rows - 1:
                     collision = True
                     break
-                if game_board[x + block.x][y + block.y]:
+                if game_board[x + block.x + nx][y + block.y + ny] != (0, 0, 0):
                     collision = True
                     break
     return collision
