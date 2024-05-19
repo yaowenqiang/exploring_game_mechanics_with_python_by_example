@@ -1,5 +1,10 @@
 import pygame
 import random
+import logging
+
+logging.basicConfig(level=logging.DEBUG)
+
+
 
 colors = [
     (122, 78, 0),
@@ -26,10 +31,11 @@ class Block:
         self.x = x
         self.y = y
         self.type = random.randint(0, len(blocks) - 1)
-        self.rotation = 1
+        self.rotation = 0
         self.color = colors[random.randint(0, len(colors) - 1)]
 
     def shape(self):
+        logging.debug(self.type)
         return blocks[self.type][self.rotation]
 
 
