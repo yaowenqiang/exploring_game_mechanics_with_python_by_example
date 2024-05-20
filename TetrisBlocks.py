@@ -4,8 +4,6 @@ import logging
 
 logging.basicConfig(level=logging.DEBUG)
 
-
-
 colors = [
     (122, 78, 0),
     (0, 255, 0),
@@ -30,8 +28,9 @@ class Block:
     def __init__(self, x, y):
         self.x = x
         self.y = y
-        self.type = random.randint(0, len(blocks) - 1)
-        self.rotation = 0
+        # self.type = random.randint(0, len(blocks) - 1)
+        self.type = 0
+        self.rotation = 1
         self.color = colors[random.randint(0, len(colors) - 1)]
 
     def shape(self):
@@ -65,10 +64,26 @@ def draw_block():
                     (y + block.y) * grid_size + y_gap + 1, grid_size - 2, grid_size - 2])
 
 
+def find_lines():
+    lines = 0
+    for y in range(rows):
+        empty = 0
+        for x in range(cols):
+            if game_board[x][y] == (0, 0, 0):
+                empty += 1
+        if empty == 0:
+            lines += 1
+            for y2 in range(y, 1, -1):
+                for x2 in range(cols):
+                    game_board[x2][y2] = game_board[x2][y2 - 1]
+    return lines
+
+
+score = 0
 grid_size = 30
 pygame.init()
 
-screen = pygame.display.set_mode((800, 600))
+screen = pygame.display.set_mode((400, 400))
 
 cols = screen.get_width() // grid_size
 rows = screen.get_height() // grid_size
@@ -81,7 +96,15 @@ pygame.display.set_caption("Tetris")
 game_over = False
 block = Block((cols - 1) // 2, 0)
 clock = pygame.time.Clock()
-fps = 10
+fps = 8
+font = pygame.font.SysFont('Arial', 24, True, False)
+font2 = pygame.font.SysFont('Arial', 50, True, False)
+finished_text = font2.render("Game Over", True, (255, 255, 255))
+ftpos = (
+    (screen.get_width() - finished_text.get_width()) / 2,
+    (screen.get_height() - finished_text.get_height()) / 2)
+
+game_finished = False
 
 game_board = []
 # initialize game board
@@ -180,8 +203,17 @@ while not game_over:
     if block is not None:
         draw_block()
         if event.type != pygame.KEYDOWN:
-            if not drop_block():
+            if not drop_block() and not game_finished:
+                score += find_lines()
                 block = Block(random.randint(5, cols - 5), 0)
+                if collides(0, 0):
+                    game_finished = True
+    text = font.render('Score: ' + str(score), True, (255, 255, 255))
+    screen.blit(text, (0, 0))
+    if game_finished:
+        screen.blit(finished_text, ftpos)
+        block = None
+
     pygame.display.update()
 
 pygame.quit()
