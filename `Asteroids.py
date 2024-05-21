@@ -21,7 +21,20 @@ class Ship:
         screen.blit(self.image, self.position)
 
 
+class Asteroid:
+    def __init__(self, position):
+        self.position = Vector2(position)
+        self.image = pygame.image.load('images/RoidStarter/asteroid1.png')
+
+    def update(self):
+        pass
+
+    def draw(self, screen):
+        screen.blit(self.image, self.position)
+
+
 ship = Ship((100, 100))
+asteroid = Asteroid((300, 300))
 
 
 while not game_over:
@@ -31,7 +44,9 @@ while not game_over:
 
     screen.blit(background, (0,0))
     ship.update()
+    asteroid.update()
     ship.draw(screen)
+    asteroid.draw(screen)
     pygame.display.update()
 
 pygame.quit()
