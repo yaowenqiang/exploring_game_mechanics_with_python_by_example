@@ -96,7 +96,7 @@ pygame.display.set_caption("Tetris")
 game_over = False
 block = Block((cols - 1) // 2, 0)
 clock = pygame.time.Clock()
-fps = 8
+fps = 5
 font = pygame.font.SysFont('Arial', 24, True, False)
 font2 = pygame.font.SysFont('Arial', 50, True, False)
 finished_text = font2.render("Game Over", True, (255, 255, 255))
