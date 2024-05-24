@@ -2,6 +2,7 @@ import pygame
 import logging
 from pygame import Vector2
 # from pygame import rotozoom
+from pygame.transform import  rotozoom
 pygame.init()
 screen = pygame.display.set_mode((800, 800))
 pygame.display.set_caption("Roids")
@@ -30,8 +31,11 @@ class Ship:
             self.forward = self.forward.rotate(1)
 
     def draw(self, screen):
-        rotated_image = pygame.transform.rotate(self.image, self.angle)
-        screen.blit(rotated_image, self.position)
+        angle = self.forward.angle_to(Vector2(0, -1))
+        rotated_surface = rotozoom(self.image, angle, 1.0)
+        rotated_surface_size = Vector2(rotated_surface.get_size())
+        blit_position = self.position - rotated_surface_size // 2
+        screen.blit(rotated_surface, blit_position)
 
 
 class Asteroid:
