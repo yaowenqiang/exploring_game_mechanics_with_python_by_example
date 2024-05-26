@@ -1,8 +1,9 @@
 import pygame
 import logging
-import  random
+import random
 from pygame import Vector2
 from pygame.transform import rotozoom
+
 pygame.init()
 screen = pygame.display.set_mode((800, 800))
 pygame.display.set_caption("Roids")
@@ -20,6 +21,7 @@ class Ship:
         self.position = Vector2(position)
         self.image = pygame.image.load('images/RoidStarter/ship.png')
         self.forward = Vector2(0, -1)
+        self.bullets = []
 
     def update(self):
         is_key_pressed = pygame.key.get_pressed()
@@ -29,6 +31,8 @@ class Ship:
             self.forward = self.forward.rotate(-1)
         if is_key_pressed[pygame.K_RIGHT]:
             self.forward = self.forward.rotate(1)
+        if is_key_pressed[pygame.K_SPACE]:
+            self.bullets.append(Bullet(Vector2(self.position), self.forward))
 
     def draw(self, screen):
         angle = self.forward.angle_to(Vector2(0, -1))
@@ -51,6 +55,18 @@ class Asteroid:
         screen.blit(self.image, self.position)
 
 
+class Bullet:
+    def __init__(self, position, velocity):
+        self.position = position
+        self.velocity = velocity
+
+    def update(self):
+        self.position += self.velocity
+
+    def draw(self, screen):
+        pygame.draw.rect(screen, (255, 0, 0), [self.position.x, self.position.y, 5, 5])
+
+
 ship = Ship((100, 700))
 asteroids = []
 for i in range(10):
@@ -58,22 +74,22 @@ for i in range(10):
         Asteroid((random.randint(0, screen.get_width()), random.randint(0, screen.get_height())))
     )
 
-
-
 while not game_over:
-    clock.tick(55)
+    clock.tick(100)
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             gme_over = True
 
-    screen.blit(background, (0,0))
+    screen.blit(background, (0, 0))
     ship.update()
     ship.draw(screen)
     for a in asteroids:
-        print(a.position)
         a.update()
         a.draw(screen)
+
+    for b in ship.bullets:
+        b.update()
+        b.draw(screen)
     pygame.display.update()
 
 pygame.quit()
-
