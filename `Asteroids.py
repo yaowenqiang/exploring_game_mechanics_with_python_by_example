@@ -22,17 +22,21 @@ class Ship:
         self.image = pygame.image.load('images/RoidStarter/ship.png')
         self.forward = Vector2(0, -1)
         self.bullets = []
+        self.drift = (0,0)
 
     def update(self):
         is_key_pressed = pygame.key.get_pressed()
         if is_key_pressed[pygame.K_UP]:
             self.position += self.forward
+            self.drift = (self.drift + self.forward ) / 2
         if is_key_pressed[pygame.K_LEFT]:
             self.forward = self.forward.rotate(-1)
         if is_key_pressed[pygame.K_RIGHT]:
             self.forward = self.forward.rotate(1)
         if is_key_pressed[pygame.K_SPACE]:
             self.bullets.append(Bullet(Vector2(self.position), self.forward))
+
+        self.position += self.drift
 
     def draw(self, screen):
         angle = self.forward.angle_to(Vector2(0, -1))
