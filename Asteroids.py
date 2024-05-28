@@ -22,6 +22,7 @@ class Ship:
         self.image = pygame.image.load('images/RoidStarter/ship.png')
         self.forward = Vector2(0, -1)
         self.bullets = []
+        self.can_shoot = 0
         self.drift = (0,0)
 
     def update(self):
@@ -33,8 +34,14 @@ class Ship:
             self.forward = self.forward.rotate(-1)
         if is_key_pressed[pygame.K_RIGHT]:
             self.forward = self.forward.rotate(1)
-        if is_key_pressed[pygame.K_SPACE]:
+        if is_key_pressed[pygame.K_SPACE] and self.can_shoot == 0:
             self.bullets.append(Bullet(Vector2(self.position), self.forward))
+            self.can_shoot = 500
+
+        if self.can_shoot > 0:
+            self.can_shoot -= clock.get_time()
+        else:
+            self.can_shoot = 0
 
         self.position += self.drift
 
