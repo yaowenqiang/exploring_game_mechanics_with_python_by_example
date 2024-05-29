@@ -4,6 +4,18 @@ import random
 from pygame import Vector2
 from pygame.transform import rotozoom
 
+def wrap_position(position, screen):
+    x, y = position
+    w, h = screen.get_size()
+    return Vector2(x % w, y % h)
+
+def blit_rotated(position, image, forward, screen):
+    angle = forward.angle_to(Vector2(0, -1))
+    rotated_surface = rotozoom(image, angle, 1.0)
+    rotated_surface_size = Vector2(rotated_surface.get_size())
+    blit_position = position - rotated_surface_size // 2
+    screen.blit(rotated_surface, blit_position)
+
 pygame.init()
 screen = pygame.display.set_mode((800, 800))
 pygame.display.set_caption("Roids")
@@ -46,11 +58,8 @@ class Ship:
         self.position += self.drift
 
     def draw(self, screen):
-        angle = self.forward.angle_to(Vector2(0, -1))
-        rotated_surface = rotozoom(self.image, angle, 1.0)
-        rotated_surface_size = Vector2(rotated_surface.get_size())
-        blit_position = self.position - rotated_surface_size // 2
-        screen.blit(rotated_surface, blit_position)
+        self.position = wrap_position(self.position, screen)
+        blit_rotated(self.position, self.image, self.forward, screen)
 
 
 class Asteroid:
@@ -63,7 +72,8 @@ class Asteroid:
         self.position += self.velocity
 
     def draw(self, screen):
-        screen.blit(self.image, self.position)
+        self.position = wrap_position(self.position, screen)
+        blit_rotated(self.position, self.image, self.velocity, screen)
 
 
 class Bullet:
