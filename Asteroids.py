@@ -67,6 +67,8 @@ class Asteroid:
         self.position = Vector2(position)
         self.image = pygame.image.load('images/RoidStarter/asteroid1.png')
         self.velocity = Vector2(random.randint(-3, 3), random.randint(-3, 3))
+        self.radius = screen.get_width() // 2
+
 
     def update(self):
         self.position += self.velocity
@@ -74,6 +76,13 @@ class Asteroid:
     def draw(self, screen):
         self.position = wrap_position(self.position, screen)
         blit_rotated(self.position, self.image, self.velocity, screen)
+
+
+    def hit(self, position):
+        if self.position.distance_to(position) <= self.radius:
+            return True
+        else:
+            return False
 
 
 class Bullet:
@@ -108,9 +117,24 @@ while not game_over:
         a.update()
         a.draw(screen)
 
+    dead_bullets = []
+    dead_asteroids = []
     for b in ship.bullets:
         b.update()
         b.draw(screen)
+        for a in asteroids:
+            if a.hit(b.position):
+                if b not in dead_bullets:
+                    dead_bullets.append(b)
+                if a not in dead_asteroids:
+                    dead_asteroids.append(a)
+
+    for b in dead_bullets:
+        ship.bullets.remove(b)
+
+    for a in dead_asteroids:
+        asteroids.remove(a)
+
     pygame.display.update()
 
 pygame.quit()
