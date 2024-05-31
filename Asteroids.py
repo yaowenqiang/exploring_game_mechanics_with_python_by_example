@@ -3,6 +3,7 @@ import logging
 import random
 from pygame import Vector2
 from pygame.transform import rotozoom
+from pygame.mixer import Sound
 
 def wrap_position(position, screen):
     x, y = position
@@ -36,6 +37,7 @@ class Ship:
         self.bullets = []
         self.can_shoot = 0
         self.drift = (0,0)
+        self.shoot = Sound("images/shoot.wav")
 
     def update(self):
         is_key_pressed = pygame.key.get_pressed()
@@ -48,6 +50,7 @@ class Ship:
             self.forward = self.forward.rotate(1)
         if is_key_pressed[pygame.K_SPACE] and self.can_shoot == 0:
             self.bullets.append(Bullet(Vector2(self.position), self.forward))
+            self.shoot.play()
             self.can_shoot = 500
 
         if self.can_shoot > 0:
@@ -68,6 +71,7 @@ class Asteroid:
         self.image = pygame.image.load('images/RoidStarter/asteroid1.png')
         self.velocity = Vector2(random.randint(-3, 3), random.randint(-3, 3))
         self.radius = screen.get_width() // 2
+        self.explode = Sound("images/explode.mp3")
 
 
     def update(self):
@@ -80,6 +84,7 @@ class Asteroid:
 
     def hit(self, position):
         if self.position.distance_to(position) <= self.radius:
+            self.explode.play()
             return True
         else:
             return False
@@ -99,7 +104,7 @@ class Bullet:
 
 ship = Ship((100, 700))
 asteroids = []
-for i in range(10):
+for i in range(3):
     asteroids.append(
         Asteroid((random.randint(0, screen.get_width()), random.randint(0, screen.get_height())))
     )
