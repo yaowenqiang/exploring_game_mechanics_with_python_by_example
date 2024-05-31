@@ -111,6 +111,10 @@ while not game_over:
             gme_over = True
 
     screen.blit(background, (0, 0))
+
+    if ship is None:
+        pygame.display.update()
+        continue
     ship.update()
     ship.draw(screen)
     for a in asteroids:
@@ -134,7 +138,12 @@ while not game_over:
 
     for a in dead_asteroids:
         asteroids.remove(a)
+        if a.hit(ship.position):
+            ship = None
+            break
 
+    if ship is None:
+        continue
     pygame.display.update()
 
 pygame.quit()
