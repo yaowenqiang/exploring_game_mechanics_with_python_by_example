@@ -12,6 +12,13 @@ def wrap_position(position, screen):
     return Vector2(x % w, y % h)
 
 
+asteroid_images = [
+    "images/RoidStarter/asteroid1.png",
+    "images/RoidStarter/asteroid2.png",
+    "images/RoidStarter/asteroid3.png",
+]
+
+
 def blit_rotated(position, image, forward, screen):
     angle = forward.angle_to(Vector2(0, -1))
     rotated_surface = rotozoom(image, angle, 1.0)
@@ -69,9 +76,10 @@ class Ship:
 
 
 class Asteroid:
-    def __init__(self, position):
+    def __init__(self, position, size):
         self.position = Vector2(position)
-        self.image = pygame.image.load('images/RoidStarter/asteroid1.png')
+        self.image = pygame.image.load(asteroid_images[size])
+        self.size = size
         self.velocity = Vector2(random.randint(-3, 3), random.randint(-3, 3))
         self.radius = self.image.get_width() // 2
         self.explode = Sound("images/explode.mp3")
@@ -107,14 +115,17 @@ ship = Ship((100, 700))
 asteroids = []
 for i in range(20):
     asteroids.append(
-        Asteroid((random.randint(0, screen.get_width()), random.randint(0, screen.get_height())))
+        Asteroid((
+            random.randint(0, screen.get_width()),
+            random.randint(0, screen.get_height())
+        ), 0)
     )
 
 # font = pygame.font.Font("fonts/Alien.ttf", 80)
 font = pygame.font.SysFont('Arial', 80)
 text_loser = font.render("You Lost!", True, (255, 255, 255))
 text_loser_position = (
-(screen.get_width() - text_loser.get_width()) // 2, (screen.get_height() - text_loser.get_height()) // 2)
+    (screen.get_width() - text_loser.get_width()) // 2, (screen.get_height() - text_loser.get_height()) // 2)
 
 text_winner = font.render("You Won!", True, (255, 255, 255))
 text_winner_position = (
@@ -159,6 +170,9 @@ while not game_over:
 
     for a in dead_asteroids:
         asteroids.remove(a)
+        if a.size < 2:
+            asteroids.append(Asteroid(a.position, a.size + 1))
+            asteroids.append(Asteroid(a.position, a.size + 2))
         if a.hit(ship.position):
             ship = None
             break
