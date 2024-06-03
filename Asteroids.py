@@ -60,7 +60,7 @@ class Ship:
             self.forward = self.forward.rotate(1)
         if is_key_pressed[pygame.K_SPACE] and self.can_shoot == 0:
             self.bullets.append(Bullet(Vector2(self.position), self.forward))
-            # self.shoot.play()
+            self.shoot.play()
             self.can_shoot = 500
 
         if self.can_shoot > 0:
@@ -93,7 +93,7 @@ class Asteroid:
 
     def hit(self, position):
         if self.position.distance_to(position) <= self.radius:
-            # self.explode.play()
+            self.explode.play()
             return True
         else:
             return False
@@ -113,7 +113,7 @@ class Bullet:
 
 ship = Ship((100, 700))
 asteroids = []
-for i in range(20):
+for i in range(1):
     asteroids.append(
         Asteroid((
             random.randint(0, screen.get_width()),
@@ -172,7 +172,7 @@ while not game_over:
         asteroids.remove(a)
         if a.size < 2:
             asteroids.append(Asteroid(a.position, a.size + 1))
-            asteroids.append(Asteroid(a.position, a.size + 2))
+            asteroids.append(Asteroid(a.position, a.size + 1))
         if a.hit(ship.position):
             ship = None
             break
