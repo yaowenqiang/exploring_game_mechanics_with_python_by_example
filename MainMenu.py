@@ -1,4 +1,5 @@
 import pygame
+from pygame.locals import *
 
 class MainMenu:
     def __init__(self):
@@ -10,9 +11,10 @@ class MainMenu:
 
     def update(self, events):
         for event in events:
-            if event.type == pygame.K_DOWN:
-                if event.key == pygame.K_SPACE:
-                    return self.second_menu
+            key_pressed = pygame.key.get_pressed()
+            print(key_pressed)
+            if key_pressed[K_SPACE]:
+                return self.second_menu
         return self
 
     def draw(self, screen):
