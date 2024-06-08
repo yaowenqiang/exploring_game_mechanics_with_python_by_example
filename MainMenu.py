@@ -7,17 +7,14 @@ class MainMenu:
         self.font = pygame.font.SysFont('Arial', 80)
         self.title = self.font.render("Alien invasion!", True, (255,255,255))
         self.title_position = (10,10)
-        self.second_menu = None
-        self.third_menu = None
+        self.gameplay_scene = None
 
     def update(self, events):
         for event in events:
             key_pressed = pygame.key.get_pressed()
             print(key_pressed)
             if key_pressed[K_SPACE]:
-                return self.second_menu
-            if key_pressed[K_UP]:
-                return self.third_menu
+                return self.gameplay_scene
         return self
 
     def draw(self, screen):
