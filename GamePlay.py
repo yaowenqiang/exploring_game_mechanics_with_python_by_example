@@ -1,5 +1,6 @@
 import pygame
 from pygame.locals import *
+from player import  Player
 
 
 class GamePlay:
@@ -22,6 +23,7 @@ class GamePlay:
         self.button_font = pygame.font.SysFont('Arial', 15)
         self.button_text = self.button_font.render('Back', True, self.text_color)
         self.mouse_x, self.mouse_y = (0, 0)
+        self.player = Player(screen.get_height(), -100)
 
     def update(self, events):
         for event in events:
@@ -33,6 +35,8 @@ class GamePlay:
 
             if event.type == pygame.MOUSEMOTION:
                 self.mouse_x, self.mouse_y = event.pos
+
+        player.update()
         return self
 
     def draw(self, screen):
@@ -44,3 +48,5 @@ class GamePlay:
 
         screen.blit(self.button_text, (self.button_rect[0] + (self.button_width - self.button_text.get_width()) / 2,
                     self.button_rect[1] + (self.button_height - self.button_text.get_height()) / 2))
+
+        self.player.draw(screen)
