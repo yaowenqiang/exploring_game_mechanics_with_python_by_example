@@ -15,5 +15,5 @@ class Player:
             self.x -= 3
 
     def draw(self, screen):
-        screen.blit(self.image, self.x, self.y, self.image.get_width(), self.image.get_height())
+        screen.blit(self.image, [self.x, self.y, self.image.get_width(), self.image.get_height()])
 
