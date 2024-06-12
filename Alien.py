@@ -1,4 +1,5 @@
 import pygame
+import settings
 
 
 class Alien:
@@ -13,5 +14,7 @@ class Alien:
 
     def draw(self, screen):
         screen.blit(self.image,
-                    [self.x * self.sprite_size, self.y * self.sprite_size, self.sprite_size, self.sprite_size],
+                    [self.x * self.sprite_size + settings.x_offset,
+                     self.y * self.sprite_size + settings.y_offset,
+                     self.sprite_size, self.sprite_size],
                     (self.frame * self.sprite_size, self.sprite_size * self.atype, self.sprite_size, self.sprite_size))

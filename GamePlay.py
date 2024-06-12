@@ -1,7 +1,9 @@
+import random
+
 import pygame
 from pygame.locals import *
 from Player import Player
-from Alien import  Alien
+from Alien import Alien
 
 
 class GamePlay:
@@ -24,9 +26,13 @@ class GamePlay:
         self.button_font = pygame.font.SysFont('Arial', 15)
         self.button_text = self.button_font.render('Back', True, self.text_color)
         self.mouse_x, self.mouse_y = (0, 0)
-        self.player = Player(screen.get_height()-100)
+        self.player = Player(screen.get_height() - 100)
         self.aliens = []
-        self.aliens.append(Alien(1,1, 0))
+        self.alien_rows = 5
+        self.alien_cols = 15
+        for y in range(self.alien_rows):
+            for x in range(self.alien_cols):
+                self.aliens.append(Alien(x, y, random.randint(0, 1)))
 
     def update(self, events):
         for event in events:
