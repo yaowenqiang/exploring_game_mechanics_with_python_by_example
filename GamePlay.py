@@ -1,5 +1,5 @@
 import random
-
+import  settings
 import pygame
 from pygame.locals import *
 from Player import Player
@@ -34,6 +34,14 @@ class GamePlay:
             for x in range(self.alien_cols):
                 self.aliens.append(Alien(x, y, random.randint(0, 1)))
 
+        self.left_border = 50
+        self.right_border = screen.get_width() - self.left_border
+
+        self.dx = 2
+        self.dy = 10
+        self.direction = self.dx
+
+
     def update(self, events):
         for event in events:
             if event.type == pygame.MOUSEBUTTONDOWN:
@@ -61,3 +69,20 @@ class GamePlay:
         self.player.draw(screen)
         for a in self.aliens:
             a.draw(screen)
+
+        update_y = False
+
+        if (settings.x_offset + self.alien_cols * 32) > self.right_border:
+            self.direction *= -1
+            update_y = True
+            settings.x_offset = self.right_border - self.alien_cols * 32
+
+        if settings.x_offset < self.left_border:
+            self.direction *= -1
+            update_y = True
+            settings.x_offset = self.left_border
+
+        settings.x_offset += self.direction
+
+        if update_y:
+            settings.y_offset += self.dy
