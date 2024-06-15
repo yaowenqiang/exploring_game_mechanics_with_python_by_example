@@ -54,6 +54,22 @@ class GamePlay:
                 self.mouse_x, self.mouse_y = event.pos
 
         self.player.update()
+        found = False
+        dead_bullets = []
+        if self.player.bullets != [] and self.aliens != []:
+            for b in self.player.bullets:
+                for a in pygame.sprite.spritecollide(b, self.aliens, 0):
+                    self.aliens.remove(a)
+                    a.kill()
+                    found = True
+
+                if found:
+                    dead_bullets.append(b)
+
+        for b in dead_bullets:
+            self.player.bullets.remove(b)
+            b.kill()
+
         return self
 
     def draw(self, screen):
