@@ -1,5 +1,8 @@
+import random
+
 import pygame
 import settings
+from ABullet import ABullet
 
 
 class Alien(pygame.sprite.Sprite):
@@ -14,7 +17,7 @@ class Alien(pygame.sprite.Sprite):
         self.sprite_size = 32
         self.rect = self.image.get_rect()
         self.rect.topleft = (
-        self.x * self.sprite_size + settings.x_offset, self.y * self.sprite_size + settings.y_offset)
+            self.x * self.sprite_size + settings.x_offset, self.y * self.sprite_size + settings.y_offset)
 
     def flip_frame(self):
         if self.frame == 0:
@@ -23,6 +26,10 @@ class Alien(pygame.sprite.Sprite):
             self.frame = 0
 
     def draw(self, screen):
+        if random.randint(0, 3000) < 1:
+            settings.abullets.append(
+                ABullet(self.x * self.sprite_size + settings.x_offset, self.y * self.sprite_size + settings.y_offset, 5))
+
         if settings.x_offset % 10 == 0:
             self.flip_frame()
         self.rect.topleft = (

@@ -56,6 +56,7 @@ class GamePlay:
                 self.mouse_x, self.mouse_y = event.pos
 
         self.player.update()
+
         found = False
         dead_bullets = []
         if self.player.bullets != [] and self.aliens != []:
@@ -77,7 +78,6 @@ class GamePlay:
         for b in dead_bullets:
             self.player.bullets.remove(b)
             b.kill()
-        print(len(self.player.bullets))
         return self
 
     def draw(self, screen):
@@ -94,6 +94,14 @@ class GamePlay:
             a.draw(screen)
         self.player.draw(screen)
 
+        dead_abullets = []
+        for l in settings.abullets:
+            if l.y > screen.get_height():
+               dead_abullets.append(l)
+            l.draw(screen)
+
+        for l in dead_abullets:
+            settings.abullets.remove(l)
         update_y = False
 
         if (settings.x_offset + self.alien_cols * 32) > self.right_border:
