@@ -12,7 +12,6 @@ class ThirdMenu:
     def update(self, events):
         for event in events:
             key_pressed = pygame.key.get_pressed()
-            print(key_pressed)
             if key_pressed[K_SPACE]:
                 return self.main_menu
         return self
