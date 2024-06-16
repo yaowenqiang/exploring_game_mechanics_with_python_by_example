@@ -20,8 +20,6 @@ class Explosion:
                      self.sprite_size])
 
         self.frame_x -= 1
-        if self.frame_y <=0:
+        if self.frame_x <= 0:
             self.frame_x = 3
             self.frame_y -= 1
-
-

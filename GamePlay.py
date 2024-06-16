@@ -1,5 +1,5 @@
 import random
-import  settings
+import settings
 import pygame
 from pygame.locals import *
 
@@ -44,7 +44,6 @@ class GamePlay:
         self.dy = 10
         self.direction = self.dx
 
-
     def update(self, events):
         for event in events:
             if event.type == pygame.MOUSEBUTTONDOWN:
@@ -71,10 +70,14 @@ class GamePlay:
                 if found:
                     dead_bullets.append(b)
 
+                # 如果子弹已经飞出屏幕，则可以进行销毁
+                if b.y <= 0 and b not in dead_bullets:
+                    dead_bullets.append(b)
+
         for b in dead_bullets:
             self.player.bullets.remove(b)
             b.kill()
-
+        print(len(self.player.bullets))
         return self
 
     def draw(self, screen):
@@ -116,4 +119,3 @@ class GamePlay:
 
         for e in dead_explosions:
             self.explosions.remove(e)
-
